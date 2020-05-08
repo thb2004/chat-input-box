@@ -1,5 +1,4 @@
 import { Indicator } from 'mint-ui';
-import ResizeObserver from 'resize-observer-polyfill';
 import { createFace, htmlEscape } from "@/utils/utils";
 
 import emojiList from "@/components/emoji/emoji.js";

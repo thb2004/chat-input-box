@@ -543,6 +543,7 @@ export default {
     // this.getNoticeDetail()
     //   .then(res => {
     //     this.getPdfUrl(res);
+    //     Promise.all([this.getViewer(2), this.getViewer(1)]);
     //   })
     //   .catch(message => {
     //     this.$toast({
@@ -550,7 +551,6 @@ export default {
     //       position: toastConfig.position
     //     });
     //   });
-    // Promise.all([this.getViewer(2), this.getViewer(1)]);
 
     // 获取用户信息
     !this.noAccess && this.$cordova.queryUserInfo().then(USERINFO => {
@@ -562,6 +562,7 @@ export default {
       this.getNoticeDetail()
         .then(res => {
           this.getPdfUrl(res);
+          Promise.all([this.getViewer(2), this.getViewer(1)]);
         })
         .catch(message => {
           this.$toast({
@@ -569,7 +570,6 @@ export default {
             position: toastConfig.position
           });
         });
-      Promise.all([this.getViewer(2), this.getViewer(1)]);
     });
   }
 };
