@@ -1,0 +1,37 @@
+.m-comment-list {
+    height: 100%;
+    background: #f7f9fc;
+    .m-comment-list-wrapper {
+      position:absolute;
+      width: 100%;
+      height: calc(100% - 50px);
+      box-sizing: border-box;
+      -webkit-overflow-scrolling: touch;
+      overflow-scrolling: touch;
+      overflow: auto;
+    }
+    .m-hidden-footer {
+      height:100%;
+    }
+    .m-comment-detail {
+      padding: 20px 20px 0 20px;
+    }
+    .m-parent-comment {
+      background: #fff;
+      padding: 20px 20px 0 20px;
+    }
+    .m-news-footer {
+      box-sizing: border-box;
+      position: fixed;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      z-index: 9999;
+      bottom: 0;
+      padding: 0 20px;
+      width: 100%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      border-top: 1px solid #eee;
+    }
+  }

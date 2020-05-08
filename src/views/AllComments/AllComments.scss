@@ -1,0 +1,12 @@
+@import "../NewsDetail/NewsDetail.scss";
+
+.m-all-comments {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    overflow: scroll;
+    padding-bottom: 50px;
+
+    .comments-textInput {
+        width: 220px;
+    }
+}

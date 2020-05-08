@@ -1,0 +1,361 @@
+@import "@/style/animation.scss";
+
+@import "@/style/mixin.scss";
+
+.m-news-detail {
+  box-sizing: border-box;
+  height: 100%;
+
+  
+  .m-news-title,
+  .m-news-info,
+  .m-news-images,
+  .m-news-content,
+  .m-news-footer,
+  .m-news-comments {
+    padding: 0 20px;
+  }
+
+  .m-news-list {
+    position:absolute;
+    height: calc(100% - 50px);
+    top:0;
+    left:0px;
+    right:0px;
+    bottom: 50px;
+    padding-top: 20px;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+  .m-hidden-footer {
+    height:100%;
+  }
+
+  .m-reply-num,
+  .m-thumb-num {
+    color: #616063;
+
+    span {
+      margin-left: 5px
+    }
+
+    svg {
+      width: 30px;
+      height: 30px;
+      color: #616063;
+    }
+
+    svg.m-praise-active {
+      color: #3071F2;
+    }
+  }
+
+  .m-news-content {
+    padding-bottom: 20px;
+  }
+
+  .m-news-title {
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    font-size: 24px;
+    color: #2e3033;
+    line-height: 36px;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  .m-news-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0 30px 0;
+    height: 21px;
+    font-size: 15px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #a1a5ac;
+    line-height: 21px;
+
+    .m-left {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      span {
+        margin-right: 10px;
+      }
+
+      .m-creator {
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 110px;
+      }
+    }
+  }
+
+  .m-news-images {
+    li {
+      margin-bottom: 20px;
+      text-align: center;
+
+      img {
+        max-width: 100%;
+        width: auto;
+        height: auto;
+        overflow: hidden;
+        display: block;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .m-news-content {
+    font-size: 17px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
+    line-height: 32px;
+    // 冲掉reset导致ue编辑器样式失效
+    h1 {
+      display: block;
+      font-size: 2em;
+      -webkit-margin-before: 0.67em;
+      -webkit-margin-after: 0.67em;
+      -webkit-margin-start: 0px;
+      -webkit-margin-end: 0px;
+      font-weight: bold;
+    }
+
+    h2 {
+      display: block;
+      font-size: 1.5em;
+      -webkit-margin-before: 0.83em;
+      -webkit-margin-after: 0.83em;
+      -webkit-margin-start: 0px;
+      -webkit-margin-end: 0px;
+      font-weight: bold;
+    }
+
+    h3 {
+      display: block;
+      font-size: 1.17em;
+      -webkit-margin-before: 1em;
+      -webkit-margin-after: 1em;
+      -webkit-margin-start: 0px;
+      -webkit-margin-end: 0px;
+      font-weight: bold;
+    }
+
+    h4 {
+      display: block;
+      -webkit-margin-before: 1.33em;
+      -webkit-margin-after: 1.33em;
+      -webkit-margin-start: 0px;
+      -webkit-margin-end: 0px;
+      font-weight: bold;
+    }
+
+    h5 {
+      display: block;
+      font-size: 0.83em;
+      -webkit-margin-before: 1.67em;
+      -webkit-margin-after: 1.67em;
+      -webkit-margin-start: 0px;
+      -webkit-margin-end: 0px;
+      font-weight: bold;
+    }
+
+    h6 {
+      display: block;
+      font-size: 0.67em;
+      -webkit-margin-before: 2.33em;
+      -webkit-margin-after: 2.33em;
+      -webkit-margin-start: 0px;
+      -webkit-margin-end: 0px;
+      font-weight: bold;
+    }
+
+    ol,
+    ul {
+      margin: 0;
+      padding: 0;
+      width: 95%;
+    }
+
+    ol,
+    ul,
+    li {
+      list-style-type: inherit;
+    }
+
+    li {
+      clear: both;
+    }
+
+    ul.custom_dash {
+      list-style: none;
+    }
+
+    ul.custom_dash li {
+      background-position: 0 3px;
+      background-repeat: no-repeat
+    }
+
+    li.list-dash-paddingleft {
+      padding-left: 35px
+    }
+
+    ul.custom_dot {
+      list-style: none;
+    }
+
+    ul.custom_dot li {
+      background-position: 0 3px;
+      background-repeat: no-repeat
+    }
+
+    li.list-dot-paddingleft {
+      padding-left: 20px
+    }
+
+    .list-paddingleft-1 {
+      padding-left: 0
+    }
+
+    .list-paddingleft-2 {
+      padding-left: 30px
+    }
+
+    .list-paddingleft-3 {
+      padding-left: 60px
+    }
+
+    blockquote {
+      display: block;
+      -webkit-margin-before: 1em;
+      -webkit-margin-after: 1em;
+      -webkit-margin-start: 40px;
+      -webkit-margin-end: 40px;
+    }
+
+    a {
+      color: -webkit-link;
+      cursor: auto;
+      text-decoration: underline;
+    }
+
+    td,
+    th {
+      padding: 5px 10px;
+      border: 1px solid #DDD;
+    }
+  }
+
+  .m-no-data {
+    position: relative;
+    margin: 0 20px 80px 20px;
+    color: #A1A5AC;
+    font-size: 12px;
+    text-align: center;
+
+    &:after,
+    &:before {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      content: "";
+      width: 118px;
+      height: 1px;
+      background: #eee;
+    }
+
+    &:after {
+      left: 0px;
+    }
+
+    &:before {
+      right: 0px;
+    }
+  }
+
+  .m-praise-active {
+    color: #3071F2;
+
+    svg {
+      color: #3071F2;
+    }
+  }
+
+  .m-is-thumbing {
+    svg {
+      animation: thumb 1s;
+    }
+  }
+
+  .m-news-footer {
+    box-sizing: border-box;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    position: fixed;
+    z-index: 9999;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #eee;
+  }
+
+  .m-horizontal-line {
+    border-top: 10px solid #f7f9fc;
+  }
+
+  .m-fobidden-tips {
+    display: block;
+    height: 75px !important;
+    line-height: 75px !important;
+    border-radius: 4px;
+    background: #f7f9fc;
+    font-size: 16px;
+    color: #caced7;
+    text-align: center;
+  }
+
+  .m-news-comments {
+    .m-all-comments {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      margin-bottom: 19px;
+      border-bottom: 1px solid #eeeeee;
+      height: 24px;
+      font-size: 17px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: #2e3033;
+      line-height: 24px;
+      .m-comment-thumb {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        svg {
+          width: 30px;
+          height: 30px;
+        }
+        span {
+          color: #5C5F66;
+          margin-left: 5px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

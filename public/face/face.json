@@ -1,0 +1,738 @@
+[
+	{
+		"type" : "common",			
+		"key" : "weixiao",			
+		"name" : "微笑",			
+		"url" : "weixiao.png",		
+		"sort" : 1,					
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "piezui",			
+		"name" : "撇嘴",			
+		"url" : "piezui.png",		
+		"sort" : 2,					
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "xihuan",			
+		"name" : "喜欢",			
+		"url" : "xihuan.png",		
+		"sort" : 3,					
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "mengbi",			
+		"name" : "懵逼",			
+		"url" : "mengbi.png",		
+		"sort" : 4,					
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "ku",				
+		"name" : "酷",				
+		"url" : "ku.png",			
+		"sort" : 5,					
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "daku",				
+		"name" : "大哭",			
+		"url" : "daku.png",			
+		"sort" : 6,					
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "bizui",			
+		"name" : "闭嘴",			
+		"url" : "bizui.png",		
+		"sort" : 7,					
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "shuijiao",			
+		"name" : "睡觉",			
+		"url" : "shuijiao.png",		
+		"sort" : 8,					
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "jusang",			
+		"name" : "沮丧",			
+		"url" : "jusang.png",		
+		"sort" : 9,					
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "ganga",			
+		"name" : "尴尬",			
+		"url" : "ganga.png",		
+		"sort" : 10,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "nu",				
+		"name" : "怒",				
+		"url" : "nu.png",			
+		"sort" : 11,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "xixi",				
+		"name" : "嘻嘻",			
+		"url" : "xixi.png",			
+		"sort" : 12,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "maimeng",			
+		"name" : "卖萌",			
+		"url" : "maimeng.png",		
+		"sort" : 13,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "jidong",			
+		"name" : "激动",			
+		"url" : "jidong.png",		
+		"sort" : 14,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "buyue",			
+		"name" : "不悦",			
+		"url" : "buyue.png",		
+		"sort" : 15,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "hai",				
+		"name" : "嗨",				
+		"url" : "hai.png",			
+		"sort" : 16,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "jingkong",			
+		"name" : "惊恐",			
+		"url" : "jingkong.png",		
+		"sort" : 17,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "outu",				
+		"name" : "呕吐",			
+		"url" : "outu.png",			
+		"sort" : 18,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "touxiao",			
+		"name" : "偷笑",			
+		"url" : "touxiao.png",		
+		"sort" : 19,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "keai",				
+		"name" : "可爱",			
+		"url" : "keai.png",			
+		"sort" : 20,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "fanbaiyan",		
+		"name" : "翻白眼",			
+		"url" : "fanbaiyan.png",	
+		"sort" : 21,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "eishima",			
+		"name" : "诶是吗",			
+		"url" : "eishima.png",		
+		"sort" : 22,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "kun",				
+		"name" : "困",				
+		"url" : "kun.png",			
+		"sort" : 23,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "wenhaolian",		
+		"name" : "问号脸",			
+		"url" : "wenhaolian.png",	
+		"sort" : 24,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "han",				
+		"name" : "汗",				
+		"url" : "han.png",			
+		"sort" : 25,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "daxiao",			
+		"name" : "大笑",			
+		"url" : "daxiao.png",		
+		"sort" : 26,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "jizhi",			
+		"name" : "机智",			
+		"url" : "jizhi.png",		
+		"sort" : 27,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "caimi",			
+		"name" : "财迷",			
+		"url" : "caimi.png",		
+		"sort" : 28,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "wuyu",				
+		"name" : "无语",			
+		"url" : "wuyu.png",			
+		"sort" : 29,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "yiwen",			
+		"name" : "疑问",			
+		"url" : "yiwen.png",		
+		"sort" : 30,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "xu",				
+		"name" : "嘘",				
+		"url" : "xu.png",			
+		"sort" : 31,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "yun",				
+		"name" : "晕",				
+		"url" : "yun.png",			
+		"sort" : 32,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "wunai",			
+		"name" : "无奈",			
+		"url" : "wunai.png",		
+		"sort" : 33,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "feiqiulei",		
+		"name" : "非酋泪",			
+		"url" : "feiqiulei.png",	
+		"sort" : 34,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "kulou",			
+		"name" : "骷髅",			
+		"url" : "kulou.png",		
+		"sort" : 35,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "shengbing",		
+		"name" : "生病",			
+		"url" : "shengbing.png",	
+		"sort" : 36,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "zaijian",			
+		"name" : "再见",			
+		"url" : "zaijian.png",		
+		"sort" : 37,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "yunbei",			
+		"name" : "允悲",			
+		"url" : "yunbei.png",		
+		"sort" : 38,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "koubi",			
+		"name" : "抠鼻",			
+		"url" : "koubi.png",		
+		"sort" : 39,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "guzhang",			
+		"name" : "鼓掌",			
+		"url" : "guzhang.png",		
+		"sort" : 40,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "zhoumei",			
+		"name" : "皱眉",			
+		"url" : "zhoumei.png",		
+		"sort" : 41,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "huaixiao",			
+		"name" : "坏笑",			
+		"url" : "huaixiao.png",		
+		"sort" : 42,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "bishi",			
+		"name" : "鄙视",			
+		"url" : "bishi.png",		
+		"sort" : 43,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "nidongde",			
+		"name" : "你懂的",			
+		"url" : "nidongde.png",		
+		"sort" : 44,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "kuaikule",			
+		"name" : "快哭了",			
+		"url" : "kuaikule.png",		
+		"sort" : 45,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "xiaoku",			
+		"name" : "笑哭",			
+		"url" : "xiaoku.png",		
+		"sort" : 46,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "doge",				
+		"name" : "doge",			
+		"url" : "doge.png",			
+		"sort" : 47,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "wu",				
+		"name" : "污",				
+		"url" : "wu.png",			
+		"sort" : 48,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "xieyanxiao",		
+		"name" : "斜眼笑",			
+		"url" : "xieyanxiao.png",	
+		"sort" : 49,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "jingxi",			
+		"name" : "惊喜",			
+		"url" : "jingxi.png",		
+		"sort" : 50,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "sikao",			
+		"name" : "思考",			
+		"url" : "sikao.png",		
+		"sort" : 51,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "jianxiao",			
+		"name" : "奸笑",			
+		"url" : "jianxiao.png",		
+		"sort" : 52,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "haixiu",			
+		"name" : "害羞",			
+		"url" : "haixiu.png",		
+		"sort" : 53,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "zan",				
+		"name" : "赞",				
+		"url" : "zan.png",			
+		"sort" : 54,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "xia",				
+		"name" : "吓",				
+		"url" : "xia.png",			
+		"sort" : 55,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "qinqin",			
+		"name" : "亲亲",			
+		"url" : "qinqin.png",		
+		"sort" : 56,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "zhayan",			
+		"name" : "眨眼",			
+		"url" : "zhayan.png",		
+		"sort" : 57,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "jujue",			
+		"name" : "拒绝",			
+		"url" : "jujue.png",		
+		"sort" : 58,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "zoukai",			
+		"name" : "走开",			
+		"url" : "zoukai.png",		
+		"sort" : 59,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "chaofenglian",		
+		"name" : "嘲讽脸",			
+		"url" : "chaofenglian.png",	
+		"sort" : 60,				
+		"remark" : "" 				
+    },
+    {
+		"type" : "common",			
+		"key" : "chibaomihua",				
+		"name" : "吃爆米花",				
+		"url" : "chibaomihua.png",			
+		"sort" : 61,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "chibing",				
+		"name" : "吃饼",				
+		"url" : "chibing.png",			
+		"sort" : 62,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "chigua",				
+		"name" : "吃瓜",				
+		"url" : "chigua.png",			
+		"sort" : 63,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "chijitui",				
+		"name" : "吃鸡腿",				
+		"url" : "chijitui.png",			
+		"sort" : 64,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "chimian",				
+		"name" : "吃面",				
+		"url" : "chimian.png",			
+		"sort" : 65,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "qiang",			
+		"name" : "强",				
+		"url" : "qiang.png",		
+		"sort" : 66,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "ruo",				
+		"name" : "弱",				
+		"url" : "ruo.png",			
+		"sort" : 67,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "hezuo",			
+		"name" : "合作",			
+		"url" : "hezuo.png",		
+		"sort" : 68,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "shengli",			
+		"name" : "胜利",			
+		"url" : "shengli.png",		
+		"sort" : 69,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "quantou",			
+		"name" : "拳头",			
+		"url" : "quantou.png",		
+		"sort" : 70,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "haode",			
+		"name" : "好的",			
+		"url" : "haode.png",		
+		"sort" : 71,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "bixin",			
+		"name" : "比心",			
+		"url" : "bixin.png",		
+		"sort" : 72,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "qidao",			
+		"name" : "祈祷",			
+		"url" : "qidao.png",		
+		"sort" : 73,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "baoquan",			
+		"name" : "抱拳",			
+		"url" : "baoquan.png",		
+		"sort" : 74,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "jirou",			
+		"name" : "肌肉",			
+		"url" : "jirou.png",		
+		"sort" : 75,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "xiong",			
+		"name" : "熊",				
+		"url" : "xiong.png",		
+		"sort" : 76,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "waixingren",		
+		"name" : "外星人",			
+		"url" : "waixingren.png",	
+		"sort" : 77,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "youling",			
+		"name" : "幽灵",			
+		"url" : "youling.png",		
+		"sort" : 78,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "bianbian",			
+		"name" : "便便",			
+		"url" : "bianbian.png",		
+		"sort" : 79,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "wanan",			
+		"name" : "晚安",			
+		"url" : "wanan.png",		
+		"sort" : 80,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "zaoan",			
+		"name" : "早安",			
+		"url" : "zaoan.png",		
+		"sort" : 81,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "xigua",			
+		"name" : "西瓜",			
+		"url" : "xigua.png",		
+		"sort" : 82,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "caidao",			
+		"name" : "菜刀",			
+		"url" : "caidao.png",		
+		"sort" : 83,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "zhadan",			
+		"name" : "炸弹",			
+		"url" : "zhadan.png",		
+		"sort" : 84,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "aixin",			
+		"name" : "爱心",			
+		"url" : "aixin.png",		
+		"sort" : 85,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "xinsui",			
+		"name" : "心碎",			
+		"url" : "xinsui.png",		
+		"sort" : 86,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "feiji",			
+		"name" : "飞机",			
+		"url" : "feiji.png",		
+		"sort" : 87,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "lazhu",			
+		"name" : "蜡烛",			
+		"url" : "lazhu.png",		
+		"sort" : 88,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "pijiu",			
+		"name" : "啤酒",			
+		"url" : "pijiu.png",		
+		"sort" : 89,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "yaowan",			
+		"name" : "药丸",			
+		"url" : "yaowan.png",		
+		"sort" : 90,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "bingqilin",		
+		"name" : "冰淇淋",			
+		"url" : "bingqilin.png",	
+		"sort" : 91,				
+		"remark" : "" 				
+	},
+	{
+		"type" : "common",			
+		"key" : "hua",				
+		"name" : "花",				
+		"url" : "hua.png",			
+		"sort" : 92,				
+		"remark" : "" 				
+	}
+]

@@ -1,0 +1,14 @@
+@keyframes thumb {
+    0% {
+      transform: scale(1.1) rotate(-10deg);
+    }
+  
+    50% {
+      transform: scale(1.4) rotate(-45deg);
+    }
+  
+    100% {
+      transform: scale(1) rotate(0deg);
+      ;
+    }
+}
