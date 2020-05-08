@@ -699,6 +699,7 @@ export default {
     document.removeEventListener("click", this.closeFacePanel);
     document.body.removeEventListener("touchmove", this.touchmoveFn);
     document.body.removeEventListener("touchend", this.chatInputBlur);
+    document.removeEventListener("selectionchange", this.getLast);
   },
   mounted() {
     this.$bus.on("closeFacePanel", this.closeFacePanel);
@@ -706,6 +707,7 @@ export default {
     document.addEventListener("click", this.closeFacePanel);
     document.body.addEventListener("touchmove", this.touchmoveFn);
     document.body.addEventListener("touchend", this.chatInputBlur);
+    document.addEventListener("selectionchange", this.getLast);
   }
 };
 </script>
