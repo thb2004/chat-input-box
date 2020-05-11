@@ -44,7 +44,10 @@
         flex-shrink: 0;
       }
       .m-creator {
-        word-break: break-all;
+        max-width: 110px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
     .m-updated {

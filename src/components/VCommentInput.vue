@@ -12,6 +12,7 @@
         contenteditable="true"
         :id="boxId"
         :placeholder="placeholder"
+        @copy="copy"
         @paste="paste"
         @input="input"
         @click="click"
@@ -193,7 +194,7 @@ export default {
       sendMsgTips: "", //输入提示
       sendMsgKey: "", //消息发送快捷键
       faceVisible: false,
-      lastEditRange: null,  // 保存上次光标位置信息
+      lastEditRange: null // 保存上次光标位置信息
     };
   },
   props: {
@@ -215,6 +216,69 @@ export default {
     "v-emoji": Emoji
   },
   methods: {
+    removeChild() {
+      if (this.element) {
+        document.body.removeChild(this.element);
+        this.element = null;
+      }
+    },
+    // 复制
+    copy(e) {
+      // 获取复制的内容
+      let contents = window
+        .getSelection()
+        .getRangeAt(0)
+        .cloneContents();
+      let html = "";
+      console.log(contents.childNodes);
+      if (contents && contents.childNodes.length > 0) {
+        for (let i = 0; i < contents.childNodes.length; i++) {
+          const node = contents.childNodes[i];
+          if (node.nodeType == 3) {
+            // 文本节点
+            html += node.nodeValue;
+          } else if (node.nodeType == 1) {
+            // 元素节点
+            if (node.dataset.mobileNewsFace) {
+              // 表情图片
+              html += node.dataset.mobileNewsFace;
+            } else {
+              html += node.outerHTML;
+            }
+          }
+        }
+      }
+
+      console.log(html);
+      this.removeChild();
+
+      this.element = document.createElement("textarea");
+      this.element.style.position = "absolute";
+      this.element.style.left = "-9999px";
+      let yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      this.element.style.top = `${yPosition}px`;
+      this.element.setAttribute("readonly", "");
+      this.element.value = html;
+      document.body.appendChild(this.element);
+      let isReadOnly = this.element.hasAttribute("readonly");
+
+      if (!isReadOnly) {
+        this.element.setAttribute("readonly", "");
+      }
+
+      this.element.select();
+      this.element.setSelectionRange(0, this.element.value.length);
+
+      if (!isReadOnly) {
+        this.element.removeAttribute("readonly");
+      }
+
+      try {
+        this.succeeded = document.execCommand("copy");
+      } catch (err) {
+        this.succeeded = false;
+      }
+    },
     //创建节点
     createNode(htmlStr) {
       let temp = document.createElement("div");
@@ -255,15 +319,23 @@ export default {
           paste = window.clipboardData.getData("Text");
           resolve(paste);
         } else {
-          resolve(e.clipboardData.getData('text/plain'));
+          // console.log(e.clipboardData.getData("text/plain"))
+          // console.log(e.clipboardData.getData("text/html"))
+          // console.log(navigator.clipboard.readText())
+
+          // document.execCommand("insertHTML");
+
+          resolve(e.clipboardData.getData("text/plain"));
         }
       });
     },
     //粘贴消息
     paste(e) {
       e.preventDefault();
+      // document.execCommand('paste')
+      // return;
       this.dealPasteMsg(e).then(paste => {
-      //  console.log(paste);
+        console.log(paste);
         if (paste.trim()) {
           paste = andEscape(paste);
           paste = createFace(paste);
@@ -387,10 +459,13 @@ export default {
       this.getLast();
     },
     click() {
+      setTimeout(function() {
+        // ev.target.scrollIntoView && ev.target.scrollIntoView();
+        document.body.scrollTop = document.body.scrollHeight;
+      }, 100);
       this.getLast();
     },
-    focus(ev){
-      ev.target.scrollIntoView && ev.target.scrollIntoView()
+    focus(ev) {
       this.getLast();
     },
     propertychange(ev) {
@@ -541,9 +616,10 @@ export default {
       doc_emoji.setAttribute("class", "m-emoji ignore");
       doc_emoji.setAttribute("data-id", val.index);
       doc_emoji.setAttribute("data-key", val.key);
-     // if (isAndroid()) {
-        this.getFocus();
-        this.insertPositionNode(this.boxId, doc_emoji);
+      doc_emoji.setAttribute("data-mobile-news-face", `[[${val.key}]]`);
+      // if (isAndroid()) {
+      this.getFocus();
+      this.insertPositionNode(this.boxId, doc_emoji);
       // } else {
       //   this.iosInsertPositionNode(this.boxId, doc_emoji);
       // }
@@ -601,11 +677,11 @@ export default {
       if (!this.lastEditRange) {
         this.lastEditRange = this.initRange();
       }
-      const el = this.lastEditRange.startContainer;
       // 选区不在编辑器内，则初始化选区
       if (!this.rangeIsInEditor(el)) {
         this.lastEditRange = this.initRange();
       }
+      const el = this.lastEditRange.startContainer;
       // nodeType 3为text节点
       const { parentNode, nodeValue, nodeType } = el;
       const offset = this.lastEditRange.startOffset;
@@ -641,8 +717,8 @@ export default {
       let range = this.lastEditRange;
       let el = document.createElement("div");
       let frag = document.createDocumentFragment(),
-          node,
-          lastNode;
+        node,
+        lastNode;
       this.editor.contentEditable = false;
       // 判断是否有最后光标对象存在
       if (this.lastEditRange) {
@@ -664,17 +740,17 @@ export default {
         lastNode = frag.appendChild(node);
       }
       range.insertNode(frag);
-     // setTimeout(() => {
-        if (lastNode) {
-          range = range.cloneRange();
-          range.setStartAfter(lastNode);
-          range.collapse(true);
-          sel.removeAllRanges();
-          sel.addRange(range);
-          this.lastEditRange = range;
-          this.editor.contentEditable = true;
-        }
-     // }, 10);
+      // setTimeout(() => {
+      if (lastNode) {
+        range = range.cloneRange();
+        range.setStartAfter(lastNode);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        this.lastEditRange = range;
+        this.editor.contentEditable = true;
+      }
+      // }, 10);
 
       doc.scrollIntoView && doc.scrollIntoView(); // 让插入的元素显示在可视范围中
     },
@@ -689,7 +765,9 @@ export default {
       const classList = Array.from(e.target.classList || []);
       const commenInput = document.querySelector(".comments-textInput");
       if (
-        classList.indexOf("comments-textInput") === -1 && classList.indexOf("face") === -1) {
+        classList.indexOf("comments-textInput") === -1 &&
+        classList.indexOf("face") === -1
+      ) {
         commenInput && commenInput.blur();
       }
     }

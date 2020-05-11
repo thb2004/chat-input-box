@@ -10,7 +10,6 @@
         :bottomDistance="0"
       >
         <div class="m-news-title">{{newsDetail.name}}</div>
-
         <div class="m-news-info">
           <div class="m-left">
             <span class="m-creator">编辑：{{newsDetail.createName}}</span>
@@ -576,6 +575,10 @@ export default {
           rows.forEach(comment => {
             comment.content = createFace(comment.content);
           });
+          if (!this.activatedComment.child) {
+            this.$set(this.activatedComment, "child", {})
+            this.$set(this.activatedComment.child, "child", [])
+          }
           this.activatedComment.child.child = rows;
           this.activatedComment.child.total = total;
         }

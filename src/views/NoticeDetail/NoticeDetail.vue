@@ -564,12 +564,6 @@ export default {
           this.getPdfUrl(res);
           Promise.all([this.getViewer(2), this.getViewer(1)]);
         })
-        .catch(message => {
-          this.$toast({
-            message,
-            position: toastConfig.position
-          });
-        });
     });
   }
 };
