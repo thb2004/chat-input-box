@@ -1,7 +1,9 @@
 <template>
     <div class="m-no-access-wrapper">
         <div>
-            <div class="m-no-access"></div>
+            <div class="m-no-access">
+                <img src="images/noAccess.png" alt="">
+            </div>
             <div class="m-tips">Sorry，{{tip}}不存在～</div>
         </div>
     </div>
@@ -13,10 +15,8 @@
         justify-content: center;
         align-items: center;
         height: calc(100% - 60px);
+        
         .m-no-access {
-            width: 192px;
-            height: 226px;
-            background: url('/noAccess.png') center center no-repeat;
             margin-bottom: 20px;
         }
         .m-tips {

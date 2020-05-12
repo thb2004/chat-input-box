@@ -259,7 +259,7 @@ export default {
         }).then(res => {
           const { rows, total } = res.data;
           const arr = this[type == 2 ? "readedList" : "unreadList"];
-          if (rows) {
+          if (rows && rows.length) {
             rows.forEach(item => {
               type == 2 && (item.lastReadTime = formatDate(item.lastReadTime));
               this[type == 2 ? "readedList" : "unreadList"].push(item);
@@ -339,28 +339,33 @@ export default {
           fileName: attach.name
         });
       });
-      cordova.exec(
-        function(success) {
-          success.forEach((item, index) => {
-            const attach = attachList.find(i => {
-              return i.id == item.viewPath;
+      return new Promise((resolve, reject) => {
+        cordova.exec(
+          function(success) {
+            success.forEach((item, index) => {
+              const attach = attachList.find(i => {
+                return i.id == item.viewPath;
+              });
+              attach.exist = item.exist;
+              attach.filePath = item.filePath;
+              resolve(success);
             });
-            attach.exist = item.exist;
-            attach.filePath = item.filePath;
-          });
-        },
-        function(error) {},
-        "ApplicationPlugin",
-        "checkLocalPath",
-        arr
-      );
+          },
+          function(error) {
+            reject();
+          },
+          "ApplicationPlugin",
+          "checkLocalPath",
+          arr
+        );
+      });
     },
 
     // 下载文件
     download(attach) {
       // 获取文件的下载地址和存储地址
       if (attach.downloading) return;
-      if (attach.filePath) return;
+      if (attach.exist) return;
       attach.downloading = true;
       this.getDownloadUrl(attach)
         .then(() => {
@@ -424,26 +429,34 @@ export default {
       });
     },
     openFile(attach) {
-      console.log("openfile");
       console.log(attach);
       // 本地文件不存在，则先下载文件
-      if (!attach.filePath) {
+      if (!attach.exist) {
         !attach.downloading && this.download(attach);
         return;
       }
-      cordova.exec(
-        function(success) {
-          console.log("成功的回调函数");
-          console.log(JSON.stringify(success));
-        },
-        function(error) {
-          console.log("失败的回调函数");
-          console.log(error);
-        },
-        "ApplicationPlugin",
-        "openFile",
-        [{ filePath: attach.filePath }]
-      );
+      // 本地文件被删除
+      this.checkLocalPath([attach]).then(success => {
+        const isExist = success[0].exist;
+        // 已存在则直接打开
+        if (isExist) {
+          cordova.exec(
+            function(success) {
+              console.log("成功的回调函数");
+              console.log(JSON.stringify(success));
+            },
+            function(error) {
+              console.log("失败的回调函数");
+              console.log(error);
+            },
+            "ApplicationPlugin",
+            "openFile",
+            [{ filePath: attach.filePath }]
+          );
+        } else {      // 文件被删除，则先下载
+          this.download(attach);
+        }
+      });
     },
     // 获取图片原图地址
     getRemoteUrl({ params, pic, type }) {
@@ -528,7 +541,7 @@ export default {
       });
   },
   mounted() {
-    this.$cordova.setTop({ title: "公告详情" });
+     this.$cordova.setTop({ title: "公告详情" });
     const query = parseQueryParams();
     this.noticeId = (query.noticeId || "").replace(/[^0-9]+/g, "");
     // 群是否被解散或者当前人员是否在群里面
@@ -540,17 +553,10 @@ export default {
     // this.userName = query.userName || "谭海斌";
     // this.baseUrl = GLOBALCONFIG.file_server_fastdfs.baseUrl;
     // this.downloadUrl = GLOBALCONFIG.file_server_fastdfs.downloadFileApi;
-    // this.getNoticeDetail()
-    //   .then(res => {
-    //     this.getPdfUrl(res);
-    //     Promise.all([this.getViewer(2), this.getViewer(1)]);
-    //   })
-    //   .catch(message => {
-    //     this.$toast({
-    //       message,
-    //       position: toastConfig.position
-    //     });
-    //   });
+    // this.getNoticeDetail().then(res => {
+    //   this.getPdfUrl(res);
+    //   Promise.all([this.getViewer(2), this.getViewer(1)]);
+    // });
 
     // 获取用户信息
     !this.noAccess && this.$cordova.queryUserInfo().then(USERINFO => {

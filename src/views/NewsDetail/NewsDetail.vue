@@ -99,7 +99,7 @@
         @sendComs="publish"
       ></v-comment-input>
     </div>
-    <v-no-access v-if="noAccess" tips="文章" />
+    <v-no-access v-if="noAccess" tip="文章" />
   </div>
 </template>
 
@@ -490,7 +490,7 @@ export default {
         }
       })
         .then(res => {
-          const { rows, total } = res.data;
+          let { rows, total } = res.data;
           this.isRefresh = false;
           closeLoading();
           // 下拉加载的时候需要过滤掉刚最新发布的那条数据，避免页面数据重复
@@ -517,7 +517,7 @@ export default {
             this.commentList.push(...(rows || []));
           }
           this.topId = this.commentList.length
-            ? this.commentList[this.commentList.length - 1].topId
+            ? this.commentList[this.commentList.length - 1].id
             : 0;
           if (total === this.commentList.length || !rows) {
             this.allLoaded = true;
@@ -623,11 +623,11 @@ export default {
     this.$cordova.setTop({ title: "联塑时讯" });
     const query = parseQueryParams();
     this.newsId = (query.newsId || "").replace(/[^0-9]+/g, "");
-    
+
 
     // 本机测试代码
 
-    // this.newsId = query.newsId || 1260;
+   // this.newsId = query.newsId || 1272;
     // this.userId = query.userId || "5087";
     // this.sex = query.sex || 1; // 1代表男， 2代表女
     // this.netName = query.nickName || "莫雪霞1";

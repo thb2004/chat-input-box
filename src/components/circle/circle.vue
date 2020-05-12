@@ -61,6 +61,9 @@ export default {
   created() {
     this.goRotate(this.transformToDeg(this.percentNum));
   },
+  beforeDestroy(){
+    clearInterval(this.timeId);
+  },
 
   watch: {
     percentNum: function(val) {
@@ -149,6 +152,8 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 50%;
+  /* 解决旋转时oveflow失效 */
+  z-index: 1;
   overflow: hidden;
 }
 .radial-indicator-container .circle-left,

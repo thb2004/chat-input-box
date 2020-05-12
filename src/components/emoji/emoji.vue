@@ -5,10 +5,10 @@
                 v-for="(item,index) in emojiList"
                 class="ignore face"
                 :key="index"
-                @click="pushEmoji(`./face/${item.url}`,index,item.key, $event)"
+                @click="pushEmoji(`face/${item.url}`,index,item.key, $event)"
                 :title="item.name"
             >
-                <img :src="`./face/${item.url}`" :alt="item.name" class="face">
+                <img :src="`face/${item.url}`" :alt="item.name" class="face">
             </li>
         </ul>
     </div>

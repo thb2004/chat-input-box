@@ -6,7 +6,7 @@
       </div>
     </transition>
     <!-- input输入框 -->
-    <div class="m-input-wrapper" key="m-input-wrapper">
+    <div class="m-input-wrapper">
       <div
         class="comments-textInput ignore"
         contenteditable="true"
@@ -458,9 +458,8 @@ export default {
       }
       this.getLast();
     },
-    click() {
+    click(ev) {
       setTimeout(function() {
-        // ev.target.scrollIntoView && ev.target.scrollIntoView();
         document.body.scrollTop = document.body.scrollHeight;
       }, 100);
       this.getLast();
@@ -677,11 +676,12 @@ export default {
       if (!this.lastEditRange) {
         this.lastEditRange = this.initRange();
       }
+      let el = this.lastEditRange.startContainer;
       // 选区不在编辑器内，则初始化选区
       if (!this.rangeIsInEditor(el)) {
         this.lastEditRange = this.initRange();
+        el = this.lastEditRange.startContainer;
       }
-      const el = this.lastEditRange.startContainer;
       // nodeType 3为text节点
       const { parentNode, nodeValue, nodeType } = el;
       const offset = this.lastEditRange.startOffset;
@@ -719,6 +719,8 @@ export default {
       let frag = document.createDocumentFragment(),
         node,
         lastNode;
+
+      // this.editor.blur();
       this.editor.contentEditable = false;
       // 判断是否有最后光标对象存在
       if (this.lastEditRange) {
@@ -732,7 +734,6 @@ export default {
         range = this.initRange();
       }
       // 避免插入的时候重新聚焦导致软键盘弹出
-      this.editor.blur();
       range.deleteContents();
       el.appendChild(doc);
 
@@ -740,7 +741,6 @@ export default {
         lastNode = frag.appendChild(node);
       }
       range.insertNode(frag);
-      // setTimeout(() => {
       if (lastNode) {
         range = range.cloneRange();
         range.setStartAfter(lastNode);
@@ -750,7 +750,6 @@ export default {
         this.lastEditRange = range;
         this.editor.contentEditable = true;
       }
-      // }, 10);
 
       doc.scrollIntoView && doc.scrollIntoView(); // 让插入的元素显示在可视范围中
     },
@@ -763,18 +762,17 @@ export default {
     },
     chatInputBlur(e) {
       const classList = Array.from(e.target.classList || []);
-      const commenInput = document.querySelector(".comments-textInput");
       if (
         classList.indexOf("comments-textInput") === -1 &&
         classList.indexOf("face") === -1
       ) {
-        commenInput && commenInput.blur();
+        this.editor && this.editor.blur();
       }
     }
   },
   beforeDestroy() {
     this.$bus.off("closeFacePanel", this.closeFacePanel);
-    document.removeEventListener("click", this.closeFacePanel);
+    document.body.removeEventListener("click", this.closeFacePanel);
     document.body.removeEventListener("touchmove", this.touchmoveFn);
     document.body.removeEventListener("touchend", this.chatInputBlur);
     document.removeEventListener("selectionchange", this.getLast);
@@ -782,7 +780,7 @@ export default {
   mounted() {
     this.$bus.on("closeFacePanel", this.closeFacePanel);
     this.editor = document.getElementById(this.boxId);
-    document.addEventListener("click", this.closeFacePanel);
+    document.body.addEventListener("click", this.closeFacePanel);
     document.body.addEventListener("touchmove", this.touchmoveFn);
     document.body.addEventListener("touchend", this.chatInputBlur);
     document.addEventListener("selectionchange", this.getLast);
