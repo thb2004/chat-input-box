@@ -152,7 +152,6 @@ export default {
       options: {
         url: "data-remote-src"
       },
-      latestCommentIds: []
     };
   },
   components: {
@@ -260,7 +259,6 @@ export default {
           });
           if (code === 200) {
             if (!this.replyUserId) {
-              this.latestCommentIds.push(String(rows.id));
               this.getMajorCommentDatail(rows.id, true);
             } else {
               this.getChildComments(this.targetId);
@@ -490,40 +488,44 @@ export default {
         }
       })
         .then(res => {
-          let { rows, total } = res.data;
+          let { rows, total, code } = res.data;
+          rows = rows || [];
           this.isRefresh = false;
           closeLoading();
-          // 下拉加载的时候需要过滤掉刚最新发布的那条数据，避免页面数据重复
-          if (this.latestCommentId.length) {
-            rows = (rows || []).filter(item => {return this.latestCommentIds.indexOf(String(item.id)) === -1 });
-          }
-          (rows || []).forEach(comment => {
-            comment.content = createFace(comment.content);
-            comment.showReply = false;
-            comment.reply = "";
-            if (comment.child.total > 5) {
-              comment.child.child = comment.child.child.slice(0, 2);
-            }
-            comment.child.child.forEach(child => {
-              child.content = createFace(child.content);
-              child.showReply = false;
-              child.reply = "";
+          if (code === 200) {
+            rows.forEach(comment => {
+              comment.content = createFace(comment.content);
+              comment.showReply = false;
+              comment.reply = "";
+              if (comment.child.total > 5) {
+                comment.child.child = comment.child.child.slice(0, 2);
+              }
+              comment.child.child.forEach(child => {
+                child.content = createFace(child.content);
+                child.showReply = false;
+                child.reply = "";
+              });
             });
-          });
-          this.totalComments = total;
-          if (isInit) {
-            this.commentList = rows || [];
-          } else {
-            this.commentList.push(...(rows || []));
-          }
-          this.topId = this.commentList.length
-            ? this.commentList[this.commentList.length - 1].id
-            : 0;
-          if (total === this.commentList.length || !rows) {
-            this.allLoaded = true;
+            this.totalComments = total;
+            if (isInit) {
+              this.commentList = rows;
+            } else {
+              // 下拉加载的时候需要过滤掉刚最新发布的那条数据，避免页面数据重复
+              rows.forEach(comment => {
+                const isExist = this.commentList.some((item) => {
+                  return item.id === comment.id
+                });
+                !isExist && this.commentList.push(comment)
+              })
+            }
+            this.topId =  rows.length ? rows[rows.length - 1].topId : this.topId;
+            if (total === this.commentList.length) {
+              this.allLoaded = true;
+            }
           }
         })
         .catch(e => {
+          console.log(e)
           closeLoading();
           this.$toast({
             message: "获取评论失败",
@@ -576,8 +578,8 @@ export default {
             comment.content = createFace(comment.content);
           });
           if (!this.activatedComment.child) {
-            this.$set(this.activatedComment, "child", {})
-            this.$set(this.activatedComment.child, "child", [])
+            this.$set(this.activatedComment, "child", {});
+            this.$set(this.activatedComment.child, "child", []);
           }
           this.activatedComment.child.child = rows;
           this.activatedComment.child.total = total;
@@ -590,7 +592,7 @@ export default {
         e.preventDefault();
         this.$cordova.openUrl(el.href);
       }
-    },
+    }
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -624,10 +626,9 @@ export default {
     const query = parseQueryParams();
     this.newsId = (query.newsId || "").replace(/[^0-9]+/g, "");
 
-
     // 本机测试代码
 
-   // this.newsId = query.newsId || 1272;
+    // this.newsId = query.newsId || 1289;
     // this.userId = query.userId || "5087";
     // this.sex = query.sex || 1; // 1代表男， 2代表女
     // this.netName = query.nickName || "莫雪霞1";

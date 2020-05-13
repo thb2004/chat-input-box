@@ -1,6 +1,3 @@
-* {
-    touch-action: pan-y;
-}
 
 html {
     overflow: hidden;
@@ -43,17 +40,18 @@ body {
     right: 0;
     left: 0;
     bottom: 0;
-    -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
+    -webkit-overflow-scrolling: touch;
     overflow-scrolling: touch;
-    background-color: #fff;
     height: 100%;
+    background-color: #fff;
     color: #2E3033;
     font-family: PingFangSC-Regular, PingFang SC, "Microsoft YaHei", Arial, Helvetica, sans-serif, "宋体";
     font-size: 14px;
     text-align: left;
     overflow: hidden;
     user-select: none;
+    -webkit-user-select: none;
 }
 
 select {

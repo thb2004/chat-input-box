@@ -116,7 +116,7 @@ const pdfArr = ['pdf','caj'];
 // zip格式
 const zipArr = ['zip','rar','tar','jar'];
 // 音频格式
-const audioArr = ['audi','mp3'];
+const audioArr = ['audi','mp3', 'wav'];
 // 视频格式
 const videoArr = ['mp4','flv','rmvb','mpg','avi','swf','rm'];
 

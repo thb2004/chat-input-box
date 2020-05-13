@@ -27,7 +27,7 @@
             }
             li.ignore {
                 box-sizing: border-box;
-                padding: 3px;
+                padding: 5px;
             }
         }
     }
@@ -52,7 +52,6 @@ export default {
         faceVisible(val){
             if (val && !this.hasLoaded) {
                 this.$nextTick(() => {
-                    document.body.scrollTop = "180px"
                     const elUl = document.querySelector('.m-expression');
                     const elLi = Array.from(elUl.querySelectorAll("li"));
                     const W = elUl.offsetWidth - 1;
@@ -71,7 +70,7 @@ export default {
         // 计算单行最多能放置的表情数
         calcLineNum (w) {
             // 单个表情最大的宽度
-            const MAXWIDTH = 36;
+            const MAXWIDTH = 50;
             let i = 5;
             let maxCount = 0;
             while (i > 4) {

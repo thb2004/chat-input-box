@@ -55,7 +55,6 @@ export default {
       isRefresh: false,
       placeholder: "",
       isFocus: false,           // 是否聚焦
-      latestCommentIds: [],
     };
   },
   components: {
@@ -133,7 +132,6 @@ export default {
           position: toastConfig.position,
         })
         if (code === 200) {
-          this.latestCommentIds.push(String(rows.id));
           this.getMajorCommentDatail(rows.id, true);
           this.setTitle( `共${this.totalComments + 1}条回复`)
           this.init();
@@ -202,19 +200,19 @@ export default {
             this.commentList = rows;
           } else {
             // 下拉加载的时候需要过滤掉刚最新发布的那条数据，避免页面数据重复
-            if (this.latestCommentId.length) {
-              rows = rows.filter(item => {return this.latestCommentIds.indexOf(String(item.id)) === -1 });
-            }
             rows.forEach(comment => {
-              comment.content = createFace(comment.content)
+              comment.content = createFace(comment.content);
+              const isExist = this.commentList.some((item) => {
+                  return item.id === comment.id
+                });
+                !isExist && this.commentList.push(comment)
             })
-            this.commentList.push(...rows);
           }
           this.topId = this.commentList[this.commentList.length - 1].id;
           this.totalComments = total;
           this.setTitle( `共${this.totalComments}条回复`)
 				}
-				if (total === this.commentList.length || !rows) {
+				if (total === this.commentList.length) {
             this.allLoaded = true;
         }
       }).catch(() => {

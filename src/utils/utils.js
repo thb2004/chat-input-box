@@ -121,6 +121,10 @@ export const isAndroid = () => {
     return /Android/i.test(UA);
 }
 
+export const isIphoneXr = () => {
+  return /iphone/gi.test(window.navigator.userAgent) && window.devicePixelRatio && window.devicePixelRatio === 2 && window.screen.width === 414 && window.screen.height === 896;
+}
+
 export const parseQueryParams = () => {
     let url = window.location.href;
     let search = url.substring(url.lastIndexOf("?") + 1);
