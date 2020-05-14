@@ -8,10 +8,11 @@
     <!-- input输入框 -->
     <div class="m-input-wrapper">
       <div
-        :class="['comments-textInput ignore', {'iphonexr-user-select': isFocus, 'iphonexr': isIphoneXr()}]"
+        :class="['comments-textInput ignore', {'iphonexr-chat-input-focus': isFocus, 'iphonexr': isIphoneXr()}]"
         contenteditable="true"
         :id="boxId"
         :placeholder="placeholder"
+        @cut="cut"
         @blur="blur"
         @copy="copy"
         @paste="paste"
@@ -58,12 +59,13 @@
   word-break: break-word;
   user-select: text;
   -webkit-user-select: text;
+  white-space: pre-wrap;
   &:empty::after {
     color: #8a8f99;
     content: attr(placeholder);
   }
   img {
-    width: 20px;
+    width: 25px;
     vertical-align: middle;
   }
 }
@@ -72,7 +74,7 @@
   user-select: none;
   -webkit-user-select: none;
 }
-.iphonexr-user-select {
+.iphonexr-chat-input-focus {
   user-select: text;
   -webkit-user-select: text;
 }
@@ -180,7 +182,6 @@ button {
 
 <script>
 import Emoji from "@/components/emoji/emoji.vue";
-import { toastConfig } from "@/utils/config";
 
 import {
   htmlEscape,
@@ -227,11 +228,74 @@ export default {
     isIphoneXr() {
       return isIphoneXr();
     },
-    removeChild() {
-      if (this.element) {
-        document.body.removeChild(this.element);
-        this.element = null;
+    removeChild(element) {
+      if (element) {
+        document.body.removeChild(element);
+        element = null;
       }
+    },
+    // 处理复制体信息
+    dealMsg(nodes, config) {
+      if (!nodes || !nodes.length) return;
+      for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        switch (node.nodeName) {
+          case "#text": // 文本节点
+            config.html += node.nodeValue;
+            break;
+          case "IMG": // 图片
+            // 元素节点
+            if (node.dataset.mobileNewsFace) {
+              // 表情图片
+              config.html += node.dataset.mobileNewsFace;
+            } else {
+              config.html += node.outerHTML;
+            }
+            break;
+          case "BR":    // 换行符
+            config.html += "\n";
+            break;
+          case "DIV":
+            if (
+              node.childNodes.length &&
+              node.childNodes[0].nodeName !== "BR"
+            ) {
+              config.html += "\n";
+            }
+            this.dealMsg(node.childNodes, config);
+            break;
+        }
+      }
+    },
+    // 剪切
+    cut(e) {
+      // 获取剪切的内容
+      const range = window.getSelection().getRangeAt(0)
+      let contents = range.cloneContents();
+      let config = {
+        html: ""
+      };
+      this.dealMsg(contents.childNodes, config);
+      console.log(config.html);
+      this.removeChild(this.element);
+      range.deleteContents();
+      this.element = document.createElement("textarea");
+      this.element.style.position = "absolute";
+      this.element.style.left = "-9999px";
+      let yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      this.element.style.top = `${yPosition}px`;
+      this.element.value = config.html;
+      document.body.appendChild(this.element);
+      this.element.select();
+      this.element.setSelectionRange(0, this.element.value.length);
+      try {
+        this.succeeded = document.execCommand("cut");
+      } catch (err) {
+        this.succeeded = false;
+      }
+      setTimeout(() => {
+        this.removeChild(this.element);
+      }, 100);
     },
     // 复制
     copy(e) {
@@ -240,27 +304,12 @@ export default {
         .getSelection()
         .getRangeAt(0)
         .cloneContents();
-      let html = "";
-      if (contents && contents.childNodes.length > 0) {
-        for (let i = 0; i < contents.childNodes.length; i++) {
-          const node = contents.childNodes[i];
-          if (node.nodeType == 3) {
-            // 文本节点
-            html += node.nodeValue;
-          } else if (node.nodeType == 1) {
-            // 元素节点
-            if (node.dataset.mobileNewsFace) {
-              // 表情图片
-              html += node.dataset.mobileNewsFace;
-            } else {
-              html += node.outerHTML;
-            }
-          }
-        }
-      }
-
-      console.log(html);
-      this.removeChild();
+      let config = {
+        html: ""
+      };
+      this.dealMsg(contents.childNodes, config);
+      console.log(config.html);
+      this.removeChild(this.element);
 
       this.element = document.createElement("textarea");
       this.element.style.position = "absolute";
@@ -268,7 +317,7 @@ export default {
       let yPosition = window.pageYOffset || document.documentElement.scrollTop;
       this.element.style.top = `${yPosition}px`;
       this.element.setAttribute("readonly", "");
-      this.element.value = html;
+      this.element.value = config.html;
       document.body.appendChild(this.element);
       let isReadOnly = this.element.hasAttribute("readonly");
 
@@ -289,6 +338,11 @@ export default {
         this.succeeded = false;
       }
     },
+    createElement(tagName, htmlStr) {
+      let temp = document.createElement(tagName);
+      temp.innerHTML = htmlStr;
+      return temp;
+    },
     //创建节点
     createNode(htmlStr) {
       let temp = document.createElement("div");
@@ -306,8 +360,8 @@ export default {
             if (item.kind === "string") {
               const promise = new Promise((resolve, reject) => {
                 item.getAsString(str => {
-                  // url要解码
-                  if (item.type.indexOf("url") != -1) {
+                  // uri要解码
+                  if (item.type.indexOf("uri") != -1) {
                     resolve(decodeURIComponent(str));
                   } else {
                     resolve(str);
@@ -344,132 +398,66 @@ export default {
         }
       });
     },
+    dealNode(dom) {
+      switch (dom.nodeName) {
+        case "IMG":
+          //表情
+          if (dom.dataset.key) {
+            let data = {
+              url: dom.src,
+              index: 10,
+              key: dom.dataset.key
+            };
+            this.pushEmoji(data);
+          }
+          break;
+        case "A":
+          //链接
+          let oTextNode = document.createTextNode(
+            textEscape(`${dom.innerText} `)
+          );
+          this.insertPositionNode(this.boxId, oTextNode);
+          break;
+        case "BR":
+          let br = document.createElement("br");
+          this.insertPositionNode(this.boxId, br);
+          break;
+        case "DIV":
+          for (let i = 0; i < dom.childNodes.length; i++) {
+            let node = dom.childNodes[i];
+            this.dealNode(node);
+          }
+          break;
+        case "SPAN":
+          let span = document.createTextNode(textEscape(`${dom.innerText}`));
+          this.insertPositionNode(this.boxId, span);
+          break;
+        case "#text":
+          let other = document.createTextNode(textEscape(`${dom.data}`));
+          this.insertPositionNode(this.boxId, other);
+          break;
+      }
+    },
     //粘贴消息
     paste(e) {
       e.preventDefault();
-      // document.execCommand('paste')
-      // return;
       this.dealPasteMsg(e).then(paste => {
         console.log(paste);
         if (paste.trim()) {
           paste = andEscape(paste);
           paste = createFace(paste);
           let doms = this.createNode(paste);
-          if (doms.childNodes.length == 1) {
-            let dom = doms.childNodes[0];
-            if (dom.nodeType == 1) {
-              switch (dom.nodeName) {
-                case "IMG":
-                  //表情
-                  if (dom.dataset.key) {
-                    let data = {
-                      url: dom.src,
-                      index: 10,
-                      key: dom.dataset.key
-                    };
-                    this.pushEmoji(data);
-                  }
-                  break;
-                case "A":
-                  //链接
-                  let oTextNode = document.createTextNode(
-                    textEscape(`${dom.innerText} `)
-                  );
-                  this.insertPositionNode(this.boxId, oTextNode);
-                  break;
-                case "DIV":
-                  for (let i = 0; i < dom.childNodes.length; i++) {
-                    let node = dom.childNodes[i];
-                    if (node.nodeName == "#text") {
-                      let text = node.textContent.replace(/\n/g, "");
-                      if (text) {
-                        let oTextNode = document.createTextNode(
-                          textEscape(`${text}`)
-                        );
-                        this.insertPositionNode(this.boxId, oTextNode);
-                      }
-                    }
-                  }
-                  break;
-                case "SPAN":
-                  let span = document.createTextNode(
-                    textEscape(`${dom.innerText}`)
-                  );
-                  this.insertPositionNode(this.boxId, span);
-                  break;
-              }
-            } else if (dom.nodeType == 3) {
-              let text = document.createTextNode(textEscape(dom.nodeValue));
-              this.insertPositionNode(this.boxId, text);
-            }
-          } else {
-            for (let i = 0; i < doms.childNodes.length; i++) {
-              this.getFocus();
-              let dom = doms.childNodes[i];
-              if (dom.nodeType == 1) {
-                switch (dom.nodeName) {
-                  case "IMG":
-                    //表情
-                    if (dom.dataset.key) {
-                      let data = {
-                        url: dom.src,
-                        index: dom.dataset.id,
-                        key: dom.dataset.key
-                      };
-                      this.pushEmoji(data);
-                    }
-                    break;
-                  case "DIV":
-                    for (let i = 0; i < dom.childNodes.length; i++) {
-                      let node = dom.childNodes[i];
-                      if (node.nodeName == "#text") {
-                        let text = node.textContent.replace(/\n/g, "");
-                        if (text) {
-                          let oTextNode = document.createTextNode(
-                            textEscape(`${text}`)
-                          );
-                          this.insertPositionNode(this.boxId, oTextNode);
-                        }
-                      }
-                    }
-                    break;
-                  case "A":
-                    //链接
-                    let oTextNode = document.createTextNode(
-                      textEscape(`${dom.innerText} `)
-                    );
-                    this.insertPositionNode(this.boxId, oTextNode);
-                    break;
-                  case "SPAN":
-                    let text = document.createTextNode(
-                      textEscape(`${dom.innerText}`)
-                    );
-                    this.insertPositionNode(this.boxId, text);
-                    break;
-
-                  case "BR":
-                    let br = document.createElement("br");
-                    this.insertPositionNode(this.boxId, br);
-                    break;
-                  default:
-                    let other = document.createTextNode(
-                      textEscape(`${dom.innerText}`)
-                    );
-                    this.insertPositionNode(this.boxId, other);
-                    break;
-                }
-              } else if (dom.nodeType == 3) {
-                let text = document.createTextNode(textEscape(dom.nodeValue));
-                this.insertPositionNode(this.boxId, text);
-              }
-            }
+          for (let i = 0; i < doms.childNodes.length; i++) {
+            this.getFocus();
+            let dom = doms.childNodes[i];
+            this.dealNode(dom);
           }
         }
       });
     },
     input(ev) {
       if (!isAndroid()) {
-        this.deleteBr(ev);
+        this.deleteBr(ev.target);
       }
       this.getLast();
     },
@@ -489,7 +477,7 @@ export default {
     },
     propertychange(ev) {
       if (!isAndroid()) {
-        this.deleteBr(ev);
+        this.deleteBr(ev.target);
       }
       this.getLast();
     },
@@ -509,8 +497,7 @@ export default {
       this.faceVisible = !this.faceVisible;
     },
     // 兼容ios
-    deleteBr(ev) {
-      const elInput = ev.target;
+    deleteBr(elInput) {
       const innerHTML = elInput.innerHTML;
       const LEN = innerHTML.length;
       if (LEN === 4 && innerHTML === "<br>") {
@@ -523,11 +510,11 @@ export default {
       !config &&
         (config = {
           messageArr_: [],
-          bool: false,
-          ui_str: "", //推送到聊天列表
-          send_str: "" //推送到后台
+          ui_str: "", //推送到界面
+          send_str: "" //推送到后台数据库
         });
       preVal = Array.from(preVal);
+      if (!preVal.length) return;
       let count = preVal.length;
       let showType = 1;
       preVal.forEach((item, index, array) => {
@@ -550,10 +537,7 @@ export default {
         else if (item.nodeName == "IMG") {
           // 表情
           if (item.dataset.id) {
-            config.ui_str += `<img src='${item.src.replace(
-              "http://localhost:9080/",
-              "."
-            )}' class='m-emoji' data-key='${item.dataset.key}' >`;
+            config.ui_str += `<img src='${item.src}' class='m-emoji' data-key='${item.dataset.key}' >`;
 
             config.send_str += "[[" + item.dataset.key + "]]";
             if (count == 1) {
@@ -571,6 +555,10 @@ export default {
         // DIV
         else if (item.nodeName == "DIV") {
           const nodes = item.childNodes;
+          if (nodes.length && nodes[0].nodeName !== "BR") {
+            config.ui_str += "<br>";
+            config.send_str += "\n";
+          }
           this.cutMsg(nodes, config);
         }
       });
@@ -769,8 +757,13 @@ export default {
         sel.addRange(range);
         this.lastEditRange = range;
         this.editor.contentEditable = true;
+        const parentNode = lastNode.parentNode;
+        const lastChild = parentNode ? parentNode.lastChild : null;
+        if (lastChild && lastChild.nodeName === "BR") {
+          parentNode.removeChild(lastChild);
+        }
+        console.log(lastChild);
       }
-
       doc.scrollIntoView && doc.scrollIntoView(); // 让插入的元素显示在可视范围中
     },
     closeFacePanel(ev) {
@@ -791,18 +784,15 @@ export default {
     this.$bus.off("closeFacePanel", this.closeFacePanel);
     document.body.removeEventListener("click", this.closeFacePanel);
     document.body.removeEventListener("touchmove", this.touchmoveFn);
-    //this.rightEl.removeEventListener("touchend", this.chatInputBlur);
     document.body.removeEventListener("touchend", this.chatInputBlur);
     document.removeEventListener("selectionchange", this.getLast);
   },
   mounted() {
-    console.log(1)
     this.$bus.on("closeFacePanel", this.closeFacePanel);
     this.editor = document.getElementById(this.boxId);
-    // this.rightEl = document.querySelector('.m-chat-input-box-right')
     document.body.addEventListener("click", this.closeFacePanel);
     document.body.addEventListener("touchmove", this.touchmoveFn);
-    // this.rightEl && this.rightEl.addEventListener("touchend", this.chatInputBlur);
+    // ios聚焦的时候。。点击页面其他地方不失去焦点，，所以需js失去焦点,避免插入表情的时候会先聚焦导致软键盘弹出
     document.body.addEventListener("touchend", this.chatInputBlur);
     document.addEventListener("selectionchange", this.getLast);
   }

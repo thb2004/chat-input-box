@@ -188,7 +188,7 @@
     padding: 10px;
 
     .m-replyer {
-      line-height: 20px;
+      line-height: 24px;
     }
 
     .m-replyer-item {
@@ -201,6 +201,10 @@
       -webkit-box-orient: vertical;
       .m-replyer-info {
         display: inline;
+        vertical-align: middle;
+        span {
+          vertical-align: middle;
+        }
       }
     }
 
