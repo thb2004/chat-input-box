@@ -473,13 +473,18 @@ export default {
       }
       this.getLast();
     },
+    blur() {
+      this.isFocus = false;
+      this.timer && clearInterval(this.timer);
+    },
     click(ev) {
-      setTimeout(function() {
-        document.body.scrollTop = document.body.scrollHeight;
-      }, 100);
       this.getLast();
     },
     focus(ev) {
+      this.isFocus = true;
+      this.timer = setInterval(() => {
+        document.body.scrollTop = document.body.scrollHeight;
+      }, 0);
       this.getLast();
     },
     propertychange(ev) {
