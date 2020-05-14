@@ -8,10 +8,11 @@
     <!-- input输入框 -->
     <div class="m-input-wrapper">
       <div
-        class="comments-textInput ignore"
+        :class="['comments-textInput ignore', {'iphonexr-user-select': isFocus, 'iphonexr': isIphoneXr()}]"
         contenteditable="true"
         :id="boxId"
         :placeholder="placeholder"
+        @blur="blur"
         @copy="copy"
         @paste="paste"
         @input="input"
@@ -43,8 +44,8 @@
   box-sizing: border-box;
   font-size: 15px;
   min-height: 50px;
-  // max-height: 120px;
-  // width: 230px;
+  max-height: 120px;
+  width: 230px;
   padding: 15px 0;
   background: #fff;
   position: relative;
@@ -66,11 +67,14 @@
     vertical-align: middle;
   }
 }
-.comments-textInput.ignore {
-  letter-spacing: 1px;
-  // img {
-  //   margin-right: 3px;
-  // }
+// iphonexr点击body区域会导致自动聚焦,未聚焦的时候先让user-select为none,聚焦的时候再改回来为text;
+.iphonexr {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.iphonexr-user-select {
+  user-select: text;
+  -webkit-user-select: text;
 }
 .m-input-wrapper {
   box-sizing: border-box;
@@ -113,6 +117,8 @@ button {
 .m-comment-input-box {
   position: relative;
   width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
   .face-wraper {
     display: flex;
     justify-content: space-between;
@@ -183,7 +189,8 @@ import {
   wTrim,
   getBLen,
   textEscape,
-  isAndroid
+  isAndroid,
+  isIphoneXr
 } from "@/utils/utils";
 
 export default {
@@ -194,6 +201,7 @@ export default {
       sendMsgTips: "", //输入提示
       sendMsgKey: "", //消息发送快捷键
       faceVisible: false,
+      isFocus: false,
       lastEditRange: null // 保存上次光标位置信息
     };
   },
@@ -216,6 +224,9 @@ export default {
     "v-emoji": Emoji
   },
   methods: {
+    isIphoneXr() {
+      return isIphoneXr();
+    },
     removeChild() {
       if (this.element) {
         document.body.removeChild(this.element);
@@ -230,7 +241,6 @@ export default {
         .getRangeAt(0)
         .cloneContents();
       let html = "";
-      console.log(contents.childNodes);
       if (contents && contents.childNodes.length > 0) {
         for (let i = 0; i < contents.childNodes.length; i++) {
           const node = contents.childNodes[i];
@@ -296,7 +306,12 @@ export default {
             if (item.kind === "string") {
               const promise = new Promise((resolve, reject) => {
                 item.getAsString(str => {
-                  resolve(str);
+                  // url要解码
+                  if (item.type.indexOf("url") != -1) {
+                    resolve(decodeURIComponent(str));
+                  } else {
+                    resolve(str);
+                  }
                 });
               });
               promiseArr.push(promise);
@@ -753,27 +768,25 @@ export default {
 
       doc.scrollIntoView && doc.scrollIntoView(); // 让插入的元素显示在可视范围中
     },
-    closeFacePanel() {
+    closeFacePanel(ev) {
       this.faceVisible = false;
     },
     touchmoveFn(ev) {
       if (Array.from(ev.target.classList || []).indexOf("face") > -1) return;
       this.closeFacePanel();
     },
-    chatInputBlur(e) {
-      const classList = Array.from(e.target.classList || []);
-      if (
-        classList.indexOf("comments-textInput") === -1 &&
-        classList.indexOf("face") === -1
-      ) {
+    chatInputBlur(ev) {
+      if (!this.rangeIsInEditor(ev.target)) {
         this.editor && this.editor.blur();
       }
     }
   },
   beforeDestroy() {
+    this.timer && clearInterval(this.timer);
     this.$bus.off("closeFacePanel", this.closeFacePanel);
     document.body.removeEventListener("click", this.closeFacePanel);
     document.body.removeEventListener("touchmove", this.touchmoveFn);
+    //this.rightEl.removeEventListener("touchend", this.chatInputBlur);
     document.body.removeEventListener("touchend", this.chatInputBlur);
     document.removeEventListener("selectionchange", this.getLast);
   },
@@ -781,8 +794,10 @@ export default {
     console.log(1)
     this.$bus.on("closeFacePanel", this.closeFacePanel);
     this.editor = document.getElementById(this.boxId);
+    // this.rightEl = document.querySelector('.m-chat-input-box-right')
     document.body.addEventListener("click", this.closeFacePanel);
     document.body.addEventListener("touchmove", this.touchmoveFn);
+    // this.rightEl && this.rightEl.addEventListener("touchend", this.chatInputBlur);
     document.body.addEventListener("touchend", this.chatInputBlur);
     document.addEventListener("selectionchange", this.getLast);
   }
