@@ -778,6 +778,7 @@ export default {
     document.removeEventListener("selectionchange", this.getLast);
   },
   mounted() {
+    console.log(1)
     this.$bus.on("closeFacePanel", this.closeFacePanel);
     this.editor = document.getElementById(this.boxId);
     document.body.addEventListener("click", this.closeFacePanel);
