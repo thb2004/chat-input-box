@@ -8,24 +8,15 @@ const routes = [
   {
     path: '/',
     name: 'newsDetail',
-   // component: resolve => require(['../views/NewsDetail/NewsDetail'], resolve),
     component: r => require.ensure([], () => r(require('@/views/NewsDetail/NewsDetail'))),
     meta: {
       scollTopPosition: 0
     }
   },
-  // 公告详情
-  {
-    path: '/notice-detail',
-    name: 'NoticeDetail',
-   // component: resolve => require(['../views/NoticeDetail/NoticeDetail'], resolve),
-    component: r => require.ensure([], () => r(require('@/views/NoticeDetail/NoticeDetail'))),
-  },
   // 子评论列表
   {
     path: '/comments-list',
     name: 'commentsList',
-   // component: resolve => require(['../views/CommentsList/CommentsList'], resolve),
     component: r => require.ensure([], () => r(require('@/views/CommentsList/CommentsList'))),
 
   },
@@ -39,7 +30,6 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'hash',
- // mode: 'history',
   base: process.env.BASE_URL,
   routes
 })

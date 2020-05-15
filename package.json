@@ -20,7 +20,6 @@
     "normalize.css": "^8.0.1",
     "npm": "^6.14.2",
     "nprogress": "^0.2.0",
-    "pdfh5": "^1.2.22",
     "postcss-aspect-ratio-mini": "^1.0.1",
     "postcss-cssnext": "^3.1.0",
     "postcss-import": "^12.0.1",

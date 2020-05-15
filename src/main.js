@@ -48,9 +48,9 @@ import VueBus from '@/utils/bus'
 Vue.use(VueBus);
 
 
-import Vconsole from 'vconsole'
-const vConsole = new Vconsole()
-Vue.use(vConsole)
+// import Vconsole from 'vconsole'
+// const vConsole = new Vconsole()
+// Vue.use(vConsole)
 
 import VideoPlayer from 'vue-video-player'
 

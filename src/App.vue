@@ -12,10 +12,13 @@
 </style>
 
 <script>
-import {
-  isInArea
-} from "@/utils/utils";
+import { isInArea, isAndroid } from "@/utils/utils";
 export default {
+  data() {
+    return {
+      lastTouchTime: null
+    };
+  },
   methods: {
     restoreEvent(event) {
       switch (event.type) {
@@ -23,6 +26,7 @@ export default {
           this.startY = event.touches[0].clientY;
           break;
         case "touchmove":
+          if(isAndroid()) return;
           if (isInArea(event.target, "face")) return;
           if (isInArea(event.target, "m-input-wrapper")) return;
           this.moveY = event.touches[0].clientY;
@@ -51,9 +55,21 @@ export default {
           }
           break;
         case "touchend":
+          if(isAndroid()) return;
+          let iNow = new Date().getTime();
+
+          this.lastTouchTime = this.lastTouchTime || iNow + 1 /** 第一次时将lastTouchTime设为当前时间+1 */;
+
+          let delta = iNow - this.lastTouchTime;
+
+          if (delta < 500 && delta > 0) {
+            event.preventDefault();
+            return false;
+          }
+          this.lastTouchTime = iNow;
           break;
       }
-    },
+    }
   },
   beforeDestroy() {
     document.body.removeEventListener("touchstart", this.restoreEvent);
