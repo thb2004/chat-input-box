@@ -20,7 +20,7 @@ const GLOBALCONFIG = {
         },
         error_url: '172.16.100.60:18133'
     },
-    baseUrl: "http://ccfile.lesso.com:8302/",
+    baseUrl: "http://ccapi.lesso.com:8302/",
     videoUrl: "http://ccfile.lesso.com:8097/",
 }
 

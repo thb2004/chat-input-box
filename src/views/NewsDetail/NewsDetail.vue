@@ -628,7 +628,7 @@ export default {
 
     // 本机测试代码
 
-    // this.newsId = query.newsId || 1289;
+    // this.newsId = query.newsId || 630 || 1289;
     // this.userId = query.userId || "5087";
     // this.sex = query.sex || 1; // 1代表男， 2代表女
     // this.netName = query.nickName || "莫雪霞1";
