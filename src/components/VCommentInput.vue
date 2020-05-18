@@ -8,7 +8,7 @@
     <!-- input输入框 -->
     <div class="m-input-wrapper">
       <div
-        :class="['comments-textInput ignore', {'iphonexr-chat-input-focus': isFocus, 'iphonexr': isIphoneXr()}]"
+        :class="['comments-textInput ignore']"
         contenteditable="true"
         :id="boxId"
         :placeholder="placeholder"
@@ -21,20 +21,21 @@
         @focus="focus"
         @propertychange="propertychange"
       ></div>
-    </div>
-    <div
-      :class="['flex horizotal-space-between m-chat-input-box-right ignore', {'is-facePanel-show ignore' :faceVisible}]"
-    >
-      <slot></slot>
-      <div class="face-wraper ignore">
-        <div @click="faceClick">
-          <svg class="icon">
-            <use xlink:href="#icon-pinglunbiaoqing" />
-          </svg>
+      <div :class="['flex horizotal-space-between m-chat-input-box-right ignore']">
+        <slot></slot>
+        <div class="face-wraper ignore">
+          <div @click="faceClick">
+            <svg class="icon">
+              <use xlink:href="#icon-pinglunbiaoqing" />
+            </svg>
+          </div>
         </div>
+        <button @click.self="sendComs">
+          {{ btnName }}
+          </button>
       </div>
-      <button @click.self="sendComs">{{ btnName }}</button>
     </div>
+
     <div class="m-face-list" key="m-face-list" v-show="faceVisible">
       <v-emoji @switchEmoji="(val) => {pushEmoji(val)}" :faceVisible="faceVisible"></v-emoji>
     </div>
@@ -69,22 +70,12 @@
     vertical-align: middle;
   }
 }
-// iphonexr点击body区域会导致自动聚焦,未聚焦的时候先让user-select为none,聚焦的时候再改回来为text;
-.iphonexr {
-  user-select: none;
-  -webkit-user-select: none;
-}
-.iphonexr-chat-input-focus {
-  user-select: text;
-  -webkit-user-select: text;
-}
 .m-input-wrapper {
   box-sizing: border-box;
   position: relative;
-  width: 230px;
   padding-right: 10px;
   max-height: 120px;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
@@ -119,8 +110,6 @@ button {
 .m-comment-input-box {
   position: relative;
   width: 100%;
-  user-select: none;
-  -webkit-user-select: none;
   .face-wraper {
     display: flex;
     justify-content: space-between;
@@ -174,9 +163,6 @@ button {
     right: 0;
     bottom: 8px;
   }
-  .is-facePanel-show.ignore {
-    bottom: 168px;
-  }
 }
 </style>
 
@@ -202,7 +188,6 @@ export default {
       sendMsgTips: "", //输入提示
       sendMsgKey: "", //消息发送快捷键
       faceVisible: false,
-      isFocus: false,
       lastEditRange: null // 保存上次光标位置信息
     };
   },
@@ -252,7 +237,7 @@ export default {
               config.html += node.outerHTML;
             }
             break;
-          case "BR":    // 换行符
+          case "BR": // 换行符
             config.html += "\n";
             break;
           case "DIV":
@@ -270,7 +255,7 @@ export default {
     // 剪切
     cut(e) {
       // 获取剪切的内容
-      const range = window.getSelection().getRangeAt(0)
+      const range = window.getSelection().getRangeAt(0);
       let contents = range.cloneContents();
       let config = {
         html: ""
@@ -388,12 +373,6 @@ export default {
           paste = window.clipboardData.getData("Text");
           resolve(paste);
         } else {
-          // console.log(e.clipboardData.getData("text/plain"))
-          // console.log(e.clipboardData.getData("text/html"))
-          // console.log(navigator.clipboard.readText())
-
-          // document.execCommand("insertHTML");
-
           resolve(e.clipboardData.getData("text/plain"));
         }
       });
@@ -442,13 +421,11 @@ export default {
     paste(e) {
       e.preventDefault();
       this.dealPasteMsg(e).then(paste => {
-        console.log(paste);
         if (paste.trim()) {
           paste = andEscape(paste);
           paste = createFace(paste);
           let doms = this.createNode(paste);
           for (let i = 0; i < doms.childNodes.length; i++) {
-            this.getFocus();
             let dom = doms.childNodes[i];
             this.dealNode(dom);
           }
@@ -462,14 +439,12 @@ export default {
       this.getLast();
     },
     blur() {
-      this.isFocus = false;
       this.timer && clearInterval(this.timer);
     },
     click(ev) {
       this.getLast();
     },
     focus(ev) {
-      this.isFocus = true;
       this.timer = setInterval(() => {
         document.body.scrollTop = document.body.scrollHeight;
       }, 0);
@@ -624,16 +599,14 @@ export default {
       doc_emoji.setAttribute("data-id", val.index);
       doc_emoji.setAttribute("data-key", val.key);
       doc_emoji.setAttribute("data-mobile-news-face", `[[${val.key}]]`);
-      // if (isAndroid()) {
-      this.getFocus();
+      //  this.getFocus();
       this.insertPositionNode(this.boxId, doc_emoji);
-      // } else {
-      //   this.iosInsertPositionNode(this.boxId, doc_emoji);
-      // }
     },
     initRange() {
       let range = document.createRange();
       range.setStart(this.editor, 0);
+      range.setEnd(this.editor, 0);
+      range.collapse(false);
       return range;
     },
     // 自动追加光标至结尾处
@@ -677,48 +650,6 @@ export default {
       }
       return false;
     },
-    iosInsertPositionNode(nodeId, doc) {
-      // 创建片段
-      let frag = document.createDocumentFragment();
-      // 选区不存在，则初始化选区
-      if (!this.lastEditRange) {
-        this.lastEditRange = this.initRange();
-      }
-      let el = this.lastEditRange.startContainer;
-      // 选区不在编辑器内，则初始化选区
-      if (!this.rangeIsInEditor(el)) {
-        this.lastEditRange = this.initRange();
-        el = this.lastEditRange.startContainer;
-      }
-      // nodeType 3为text节点
-      const { parentNode, nodeValue, nodeType } = el;
-      const offset = this.lastEditRange.startOffset;
-
-      if (nodeType === 3) {
-        // 文本节点
-        let startTextNode = document.createTextNode(
-          textEscape(`${nodeValue.slice(0, offset)}`)
-        );
-        let endTextNode = document.createTextNode(
-          textEscape(`${nodeValue.slice(offset, nodeValue.length)}`)
-        );
-        frag.appendChild(startTextNode);
-        frag.appendChild(doc);
-        frag.appendChild(endTextNode);
-        parentNode.replaceChild(frag, el);
-      } else if (nodeType === 1) {
-        // 元素节点
-        frag.appendChild(doc);
-        if (!el.childNodes.length) {
-          el.appendChild(frag);
-        } else {
-          const preEle = this.findRangeEle(el.childNodes, offset);
-          this.insertAfter(frag, preEle);
-        }
-      }
-      doc.scrollIntoView(); // 让插入的元素显示在可视范围中
-      this.lastEditRange.setStartAfter(doc);
-    },
 
     insertPositionNode(nodeId, doc) {
       let sel = window.getSelection();
@@ -728,7 +659,6 @@ export default {
         node,
         lastNode;
 
-      // this.editor.blur();
       this.editor.contentEditable = false;
       // 判断是否有最后光标对象存在
       if (this.lastEditRange) {
@@ -752,7 +682,8 @@ export default {
       if (lastNode) {
         range = range.cloneRange();
         range.setStartAfter(lastNode);
-        range.collapse(true);
+        range.setEndAfter(lastNode);
+        range.collapse(false);
         sel.removeAllRanges();
         sel.addRange(range);
         this.lastEditRange = range;
@@ -762,7 +693,6 @@ export default {
         if (lastChild && lastChild.nodeName === "BR") {
           parentNode.removeChild(lastChild);
         }
-        console.log(lastChild);
       }
       doc.scrollIntoView && doc.scrollIntoView(); // 让插入的元素显示在可视范围中
     },
@@ -773,6 +703,11 @@ export default {
       if (Array.from(ev.target.classList || []).indexOf("face") > -1) return;
       this.closeFacePanel();
     },
+    selectionChange(ev) {
+      if (this.rangeIsInEditor(document.activeElement)) {
+        this.getLast();
+      }
+    },
     chatInputBlur(ev) {
       if (!this.rangeIsInEditor(ev.target)) {
         this.editor && this.editor.blur();
@@ -782,19 +717,18 @@ export default {
   beforeDestroy() {
     this.timer && clearInterval(this.timer);
     this.$bus.off("closeFacePanel", this.closeFacePanel);
-    document.body.removeEventListener("click", this.closeFacePanel);
+    document.body.removeEventListener("click", this.touchmoveFn);
     document.body.removeEventListener("touchmove", this.touchmoveFn);
-    document.body.removeEventListener("touchend", this.chatInputBlur);
     document.removeEventListener("selectionchange", this.getLast);
   },
   mounted() {
     this.$bus.on("closeFacePanel", this.closeFacePanel);
     this.editor = document.getElementById(this.boxId);
-    document.body.addEventListener("click", this.closeFacePanel);
+    document.body.addEventListener("click", this.touchmoveFn);
     document.body.addEventListener("touchmove", this.touchmoveFn);
     // ios聚焦的时候。。点击页面其他地方不失去焦点，，所以需js失去焦点,避免插入表情的时候会先聚焦导致软键盘弹出
     document.body.addEventListener("touchend", this.chatInputBlur);
-    document.addEventListener("selectionchange", this.getLast);
+    document.addEventListener("selectionchange", this.selectionChange);
   }
 };
 </script>

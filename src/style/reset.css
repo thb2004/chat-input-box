@@ -50,8 +50,6 @@ body {
     font-size: 14px;
     text-align: left;
     overflow: hidden;
-    user-select: none;
-    -webkit-user-select: none;
 }
 
 select {
