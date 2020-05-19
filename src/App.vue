@@ -72,15 +72,15 @@ export default {
     }
   },
   beforeDestroy() {
-    document.body.removeEventListener("touchstart", this.restoreEvent);
-    document.body.removeEventListener("touchmove", this.restoreEvent);
-    document.body.removeEventListener("touchend", this.restoreEvent);
+    // document.body.removeEventListener("touchstart", this.restoreEvent);
+    // document.body.removeEventListener("touchmove", this.restoreEvent);
+    // document.body.removeEventListener("touchend", this.restoreEvent);
   },
   mounted() {
     /*监听容器的 touch 触发事件处理逻辑*/
-    document.body.addEventListener("touchstart", this.restoreEvent);
-    document.body.addEventListener("touchmove", this.restoreEvent);
-    document.body.addEventListener("touchend", this.restoreEvent);
+    // document.body.addEventListener("touchstart", this.restoreEvent);
+    // document.body.addEventListener("touchmove", this.restoreEvent);
+    // document.body.addEventListener("touchend", this.restoreEvent);
   }
 };
 </script>
